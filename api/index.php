@@ -1,9 +1,9 @@
 <?php
-/**
- * Vercel entry point — forwards every request to the front controller in the
- * project root. Vercel's PHP runtime only picks up files under api/ so we
- * bridge to the real app here.
- */
+if (isset($_GET['test_php'])) {
+    header('Content-Type: text/plain');
+    echo 'PHP_EXECUTION_SUCCESS: ' . PHP_VERSION;
+    exit;
+}
 
 $root = dirname(__DIR__);
 $uri  = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
