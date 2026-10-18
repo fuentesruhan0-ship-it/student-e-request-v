@@ -30,12 +30,5 @@ RUN sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf
 # Expose port (Railway uses PORT env var)
 EXPOSE 80
 
-# Apache needs to listen on Railway's PORT env variable
-# Create a startup script to handle PORT configuration
-RUN echo '#!/bin/bash\n\
-sed -i "s/Listen 80/Listen ${PORT:-80}/" /etc/apache2/ports.conf\n\
-sed -i "s/:80/:${PORT:-80}/" /etc/apache2/sites-available/000-default.conf\n\
-exec apache2-foreground' > /start.sh && chmod +x /start.sh
-
-# Use our custom start script
-CMD ["/start.sh"]
+# Start Apache directly - Railway will handle port mapping
+CMD ["apache2-foreground"]
