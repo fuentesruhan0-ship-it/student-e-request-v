@@ -1,22 +1,12 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.php": {
       "runtime": "vercel-php@0.9.0"
     }
   },
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/api/paymongo-webhook.php",
-      "dest": "/api/paymongo-webhook.php"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.php"
-    }
+  "rewrites": [
+    { "source": "/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/api/paymongo-webhook.php", "destination": "/api/paymongo-webhook.php" },
+    { "source": "/(.*)", "destination": "/api/index.php" }
   ]
 }
