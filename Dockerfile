@@ -1,18 +1,13 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# Install PHP extensions required by the app
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
+    nginx \
     libpng-dev libjpeg-dev libwebp-dev \
     default-mysql-client \
     && docker-php-ext-configure gd --with-jpeg --with-webp \
     && docker-php-ext-install pdo pdo_mysql gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Enable Apache mod_rewrite and disable conflicting MPM modules
-RUN a2enmod rewrite && \
-    a2dismod mpm_event && \
-    a2dismod mpm_worker && \
-    a2enmod mpm_prefork
 
 # Set working directory
 WORKDIR /var/www/html
@@ -22,16 +17,39 @@ COPY . .
 
 # Create required directories and set permissions
 RUN mkdir -p /var/www/html/uploads /var/www/html/var/sessions \
-    && chown -R www-data:www-data /var/www/html/uploads \
-    && chown -R www-data:www-data /var/www/html/var \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/uploads \
     && chmod -R 775 /var/www/html/var
 
-# Apache configuration: allow .htaccess overrides
-RUN sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf
+# Configure Nginx
+RUN echo 'server {\n\
+    listen 80 default_server;\n\
+    root /var/www/html;\n\
+    index index.php index.html;\n\
+    \n\
+    location / {\n\
+        try_files $uri $uri/ /index.php?$query_string;\n\
+    }\n\
+    \n\
+    location ~ \.php$ {\n\
+        fastcgi_pass 127.0.0.1:9000;\n\
+        fastcgi_index index.php;\n\
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\
+        include fastcgi_params;\n\
+    }\n\
+    \n\
+    location ~ /\.ht {\n\
+        deny all;\n\
+    }\n\
+}' > /etc/nginx/sites-available/default
 
-# Expose port (Railway uses PORT env var)
+# Create startup script
+RUN echo '#!/bin/bash\n\
+php-fpm -D\n\
+nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
+
+# Expose port
 EXPOSE 80
 
-# Start Apache directly - Railway will handle port mapping
-CMD ["apache2-foreground"]
+# Start services
+CMD ["/start.sh"]
