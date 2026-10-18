@@ -1,0 +1,10 @@
+.env.local
+.env
+.git
+.agents
+.freebuff
+var/sessions/*
+ANALYSIS.md
+mail_outbox/*
+*.log
+.kiro

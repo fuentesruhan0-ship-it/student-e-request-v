@@ -1,0 +1,17 @@
+Options -Indexes
+
+# Security: protect sensitive files
+<FilesMatch "\.(env|local|log|sql|md|json|toml)$">
+    Require all denied
+</FilesMatch>
+
+# Allow .well-known (for SSL certs etc)
+<FilesMatch "^\.well-known">
+    Require all granted
+</FilesMatch>
+
+# Protect .agents, .freebuff, .kiro directories
+RedirectMatch 403 ^/\.(agents|freebuff|kiro|git)/
+
+# Pretty URLs (optional)
+RewriteEngine On

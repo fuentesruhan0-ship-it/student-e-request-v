@@ -1,0 +1,278 @@
+/* ==========================================================================
+   SRVP CLAY LAYER — Glassmorphism × Claymorphism
+   Loads AFTER style.css + glass.css. Panels & bars stay frosted glass;
+   interactive elements (buttons, pills, inputs, stat cards) become puffy,
+   soft-3D "clay": chunky radii, dual-tone inset shading, colored fills.
+   Pure additive CSS — no markup changes required.
+   ========================================================================== */
+
+:root {
+  /* Clay tokens */
+  --clay-fill:        linear-gradient(180deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.03) 100%), #141b2b;
+  --clay-fill-tinted: linear-gradient(180deg, rgba(56,189,248,.18) 0%, rgba(59,66,152,.28) 100%), #101828;
+  --clay-edge:        rgba(255,255,255,.16);
+  --clay-edge-top:    rgba(255,255,255,.42);
+
+  --sh-clay-raised:
+    8px 16px 32px -6px rgba(0, 0, 0, .65),           /* drop */
+    inset 0 2px 4px rgba(255, 255, 255, .30),        /* top light */
+    inset 0 -3px 6px rgba(0, 0, 0, .50),             /* bottom dark */
+    inset 3px 0 5px rgba(0, 0, 0, .28),              /* left dark */
+    inset -3px 0 5px rgba(255, 255, 255, .06);       /* right light */
+
+  --sh-clay-button:
+    4px 10px 22px -4px rgba(0, 0, 0, .55),
+    inset 0 2px 3px rgba(255, 255, 255, .38),
+    inset 0 -3px 5px rgba(0, 0, 0, .42);
+
+  --sh-clay-inset:
+    inset 5px 5px 14px rgba(0, 0, 0, .68),
+    inset -4px -4px 10px rgba(255, 255, 255, .05),
+    0 1px 0 rgba(255, 255, 255, .06);
+
+  --clay-press:
+    inset 4px 5px 12px rgba(0, 0, 0, .72),
+    inset -3px -3px 8px rgba(255, 255, 255, .045);
+}
+
+/* --------------------------------------------------------------------------
+   1. CLAY PANELS — soft molded cards (kept translucent for glass×clay blend)
+   -------------------------------------------------------------------------- */
+.panel.clay,
+.auth-card.clay,
+.login-loader-modal.clay {
+  border-radius: 24px 24px 26px 26px;
+}
+
+.panel-clay {
+  border-radius: 24px !important;
+  background: var(--clay-fill) !important;
+  border: 1px solid var(--clay-edge) !important;
+  box-shadow: var(--sh-clay-raised) !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. CLAY BUTTONS — puffy molded squircles that physically depress
+   -------------------------------------------------------------------------- */
+.btn {
+  --clay-base: #1a2334;
+}
+.btn:not(.btn-small-icon):not(.link-btn) {
+  border-radius: 16px 16px 18px 18px !important;
+  font-weight: 650;
+  transition: transform .14s var(--ease-io), box-shadow .14s var(--ease-io), filter .14s var(--ease-io);
+}
+
+.btn-primary {
+  border-radius: 18px 18px 20px 20px !important;
+  background: linear-gradient(180deg, #67d4ff 0%, #3aa4f0 45%, #2563eb 100%) !important;
+  border: 1px solid rgba(255, 255, 255, .48) !important;
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, .42),
+    2px 2px 8px rgba(0, 0, 0, .45),
+    inset 0 3px 5px rgba(255, 255, 255, .55),
+    inset 0 -4px 8px rgba(13, 40, 92, .60),
+    inset 2px 0 4px rgba(255, 255, 255, .18),
+    inset -2px 0 4px rgba(0, 0, 0, .14) !important;
+}
+.btn-primary:hover {
+  filter: brightness(1.08) saturate(1.05);
+  box-shadow:
+    0 12px 30px rgba(56, 189, 248, .50),
+    3px 3px 10px rgba(0, 0, 0, .42),
+    inset 0 3px 6px rgba(255, 255, 255, .62),
+    inset 0 -4px 8px rgba(13, 40, 92, .55) !important;
+}
+.btn-primary:active {
+  box-shadow: var(--clay-press), 0 2px 6px rgba(37, 99, 235, .35) !important;
+  transform: translateY(1px) scale(.985);
+}
+
+.btn-ok {
+  border-radius: 18px 18px 20px 20px !important;
+  background: linear-gradient(180deg, #4ade80 0%, #22b564 55%, #159a52 100%) !important;
+  color: #04120b !important;
+  border: 1px solid rgba(255, 255, 255, .45) !important;
+  box-shadow:
+    0 8px 20px rgba(16, 185, 129, .38),
+    2px 2px 8px rgba(0, 0, 0, .45),
+    inset 0 3px 5px rgba(255, 255, 255, .55),
+    inset 0 -4px 8px rgba(3, 70, 40, .55) !important;
+}
+.btn-ok:hover { filter: brightness(1.06); }
+.btn-ok:active {
+  box-shadow: var(--clay-press), 0 2px 6px rgba(16, 185, 129, .3) !important;
+  transform: translateY(1px) scale(.985);
+}
+
+.btn-danger {
+  border-radius: 18px 18px 20px 20px !important;
+  background: linear-gradient(180deg, #ff8095 0%, #f43f5e 55%, #d42a4c 100%) !important;
+  color: #1a0209 !important;
+  border: 1px solid rgba(255, 255, 255, .42) !important;
+  box-shadow:
+    0 8px 20px rgba(244, 63, 94, .38),
+    2px 2px 8px rgba(0, 0, 0, .45),
+    inset 0 3px 5px rgba(255, 255, 255, .5),
+    inset 0 -4px 8px rgba(90, 8, 26, .5) !important;
+}
+.btn-danger:active {
+  box-shadow: var(--clay-press) !important;
+  transform: translateY(1px) scale(.985);
+}
+
+.btn-soft, .btn-ghost {
+  background: var(--clay-fill-tinted) !important;
+  border: 1px solid var(--clay-edge) !important;
+  box-shadow: var(--sh-clay-button) !important;
+}
+.btn-soft:hover, .btn-ghost:hover {
+  background: linear-gradient(180deg, rgba(56,189,248,.28) 0%, rgba(59,66,152,.34) 100%), #101828 !important;
+  box-shadow:
+    6px 14px 28px -4px rgba(0,0,0,.6),
+    inset 0 2px 4px rgba(255,255,255,.34),
+    inset 0 -3px 6px rgba(0,0,0,.45) !important;
+}
+.btn-soft:active, .btn-ghost:active { box-shadow: var(--clay-press) !important; transform: translateY(1px) scale(.985); }
+
+.btn-google, .btn-clerk-alt {
+  border-radius: 18px 18px 20px 20px !important;
+}
+
+/* Small buttons keep a puffy profile but smaller radii */
+.btn-sm:not(.link-btn) { border-radius: 12px 12px 14px 14px !important; }
+.btn-lg  { border-radius: 20px 20px 22px 22px !important; }
+
+/* --------------------------------------------------------------------------
+   3. CLAY PILLS — molded lozenge chips with inner sheen
+   -------------------------------------------------------------------------- */
+.pill, .status-pill {
+  border-radius: 999px !important;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, .28) !important;
+  box-shadow:
+    2px 4px 10px rgba(0, 0, 0, .38),
+    inset 0 2px 3px rgba(255, 255, 255, .30),
+    inset 0 -2px 4px rgba(0, 0, 0, .30) !important;
+}
+.pill-ok  { background: linear-gradient(180deg, rgba(16,185,129,.36) 0%, rgba(16,185,129,.16) 100%) !important; }
+.pill-warn{ background: linear-gradient(180deg, rgba(245,158,11,.36) 0%, rgba(245,158,11,.16) 100%) !important; }
+.pill-bad { background: linear-gradient(180deg, rgba(244,63,94,.36) 0%, rgba(244,63,94,.16) 100%) !important; }
+.pill-info{ background: linear-gradient(180deg, rgba(14,165,233,.36) 0%, rgba(14,165,233,.16) 100%) !important; }
+
+/* --------------------------------------------------------------------------
+   4. CLAY STAT CARDS — rounded puffy tiles that float on hover
+   -------------------------------------------------------------------------- */
+.stat-card {
+  border-radius: 22px 22px 24px 24px !important;
+  box-shadow: var(--sh-clay-raised) !important;
+  border: 1px solid var(--clay-edge) !important;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease);
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    12px 22px 40px -6px rgba(0, 0, 0, .72),
+    inset 0 3px 5px rgba(255, 255, 255, .34),
+    inset 0 -4px 8px rgba(0, 0, 0, .5) !important;
+}
+
+.service-card { border-radius: 22px 22px 24px 24px !important; }
+
+/* --------------------------------------------------------------------------
+   5. CLAY INPUTS — soft pressed-in wells (light sheen on top edge)
+   -------------------------------------------------------------------------- */
+.field input,
+.field select,
+.field textarea {
+  border-radius: 14px 14px 16px 16px !important;
+  background: rgba(9, 13, 22, .78) !important;
+  box-shadow: var(--sh-clay-inset) !important;
+  border: 1px solid rgba(255, 255, 255, .07) !important;
+  padding: 12px 14px !important;
+}
+.auth-card {
+  border-radius: 22px 22px 24px 24px !important;
+}
+.auth-card .field input,
+.auth-card .field select {
+  border-radius: 13px 13px 15px 15px !important;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  box-shadow:
+    inset 5px 5px 14px rgba(0, 0, 0, .68),
+    inset -4px -4px 10px rgba(255, 255, 255, .05),
+    0 0 0 2px rgba(56, 189, 248, .45),
+    0 0 24px rgba(56, 189, 248, .18) !important;
+  border-color: rgba(56, 189, 248, .5) !important;
+}
+
+.input-icon svg, .input-icon .ic {
+  left: 13px !important;
+  top: calc(50% - 1px);
+}
+
+/* Puffy toggle/state indicators */
+.live-role-badge, .badge-dot-live {
+  border-radius: 999px !important;
+  box-shadow:
+    2px 5px 12px rgba(0, 0, 0, .4),
+    inset 0 2px 3px rgba(255, 255, 255, .28),
+    inset 0 -2px 4px rgba(0, 0, 0, .3) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. BRAND MARK & TIMELINE — puffy molded elements
+   -------------------------------------------------------------------------- */
+.brand-mark {
+  border-radius: 14px !important;
+}
+
+.timeline li {
+  border-radius: 999px;
+  padding-left: 8px;
+}
+.timeline li::before {
+  border-radius: 50%;
+  box-shadow:
+    2px 3px 7px rgba(0, 0, 0, .5),
+    inset 0 2px 3px rgba(255, 255, 255, .35),
+    inset 0 -2px 4px rgba(0, 0, 0, .35) !important;
+}
+.timeline li.ok::before {
+  background: linear-gradient(180deg, #34d399, #059669) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. MOTION — springy micro-interactions everywhere
+   -------------------------------------------------------------------------- */
+@keyframes clay-pop {
+  0%   { transform: scale(.96); opacity: .0; }
+  60%  { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.panel.clay-entry {
+  animation: clay-pop .38s var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card, .btn, .panel.clay-entry { transition: none !important; animation: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   8. SMALL SCREENS — reduce radii and puffy depth for compact viewports
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --sh-clay-raised:
+      5px 10px 20px -4px rgba(0, 0, 0, .62),
+      inset 0 2px 3px rgba(255, 255, 255, .28),
+      inset 0 -3px 5px rgba(0, 0, 0, .48),
+      inset 2px 0 4px rgba(0, 0, 0, .26),
+      inset -2px 0 4px rgba(255, 255, 255, .05);
+  }
+  .btn:not(.btn-small-icon):not(.link-btn) { border-radius: 14px 14px 16px 16px !important; }
+  .panel-cly, .panel-clay { border-radius: 20px !important; }
+}

@@ -1,0 +1,21 @@
+# Development and secrets
+.env
+.env.local
+.env.*.local
+database.sql
+ANALYSIS.md
+README.md
+
+# Local runtime directories
+var/
+mail_outbox/
+uploads/*
+!uploads/.gitkeep
+
+# Setup scripts (prevent execution on public serverless deployment)
+setup.php
+init.php
+
+# Local tools
+.freebuff/
+.agents/
