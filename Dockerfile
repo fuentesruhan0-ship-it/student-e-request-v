@@ -23,7 +23,7 @@ RUN mkdir -p /var/www/html/uploads /var/www/html/var/sessions \
 
 # Configure Nginx
 RUN echo 'server {\n\
-    listen 80 default_server;\n\
+    listen $PORT default_server;\n\
     root /var/www/html;\n\
     index index.php index.html;\n\
     \n\
@@ -41,11 +41,14 @@ RUN echo 'server {\n\
     location ~ /\.ht {\n\
         deny all;\n\
     }\n\
-}' > /etc/nginx/sites-available/default
+}' > /etc/nginx/sites-available/default.template
 
-# Create startup script with proper error handling
+# Create startup script with proper error handling and PORT substitution
 RUN echo '#!/bin/bash\n\
 set -e\n\
+export PORT=${PORT:-80}\n\
+echo "Starting services on port $PORT..."\n\
+envsubst '"'"'$PORT'"'"' < /etc/nginx/sites-available/default.template > /etc/nginx/sites-available/default\n\
 echo "Starting PHP-FPM..."\n\
 php-fpm -D\n\
 echo "PHP-FPM started successfully"\n\
