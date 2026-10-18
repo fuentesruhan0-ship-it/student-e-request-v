@@ -43,10 +43,15 @@ RUN echo 'server {\n\
     }\n\
 }' > /etc/nginx/sites-available/default
 
-# Create startup script
+# Create startup script with proper error handling
 RUN echo '#!/bin/bash\n\
+set -e\n\
+echo "Starting PHP-FPM..."\n\
 php-fpm -D\n\
-nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
+echo "PHP-FPM started successfully"\n\
+echo "Starting Nginx..."\n\
+nginx -t\n\
+exec nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
 
 # Expose port
 EXPOSE 80
